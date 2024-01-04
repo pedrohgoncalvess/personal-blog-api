@@ -1,0 +1,41 @@
+package api.routes.article
+
+import akka.http.scaladsl.server.Directives
+import api.models._
+import api.utils.{Authentication, exceptionHandlers}
+import database.Operations
+import org.json4s.DefaultFormats
+import scala.concurrent.Future
+import scala.util.{Failure, Success}
+
+
+class Delete extends Directives with JsonSupport {
+
+  implicit val formats: DefaultFormats.type = org.json4s.DefaultFormats
+
+  val dbOperations = new Operations
+  val auth = new Authentication
+
+  val route =
+    path("article") {
+      delete {
+        authenticateBasic(realm = "secure site", auth.myUserPassAuthenticator) { user =>
+          authorize(user.admin) {
+            handleExceptions(exceptionHandlers.articleDeleteExceptionHandler) {
+              parameter("id".as[String], "revision".as[String]) { (id, revision) =>
+                validate(id.isEmpty || revision.isEmpty, null) {
+                  throw new java.util.NoSuchElementException
+                }
+
+                val deleteResultOperation: Future[Unit] = dbOperations.deleteDocumentByID(id, revision)
+                onComplete(deleteResultOperation) {
+                  case Success(_) => complete(s"Document deleted")
+                  case Failure(exception) => complete(exception)
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+}
