@@ -1,0 +1,32 @@
+version: '3'
+services:
+  couchserver:
+    image: couchdb
+    restart: always
+    ports:
+      - "5984:5984"
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=admin
+    volumes:
+      - ./dbdata:/opt/couchdb/data
+    networks:
+      - my-network
+
+  akka-api:
+    build: .
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "8080:8080"
+    stdin_open: true #studie better this
+    tty: true #and this too
+    depends_on:
+      - couchserver
+    networks:
+      - my-network
+    command: ["sbt", "clean", "run"]
+
+networks:
+  my-network:
