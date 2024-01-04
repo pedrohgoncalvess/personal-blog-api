@@ -1,0 +1,6 @@
+[debug] > Exec(clean assembly, None, None)
+[error] Expected whitespace character
+[error] Expected '/'
+[error] clean assembly
+[error]       ^
+[debug] > Exec(idea-shell, None, None)
