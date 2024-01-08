@@ -1,0 +1,10 @@
+DB_HOST = database host
+DB_PORT = database port
+DB_NAME = database name
+DB_USERNAME = database admin user
+DB_PASSWORD = admin user password
+
+akka {
+    loggers = ["akka.event.Logging$DefaultLogger"]
+    loglevel = "DEBUG"
+}

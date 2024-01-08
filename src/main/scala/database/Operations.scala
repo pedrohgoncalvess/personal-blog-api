@@ -36,13 +36,11 @@ class Operations extends CouchConnection {
   }
 
 
-  def getAllDocuments: Future[Array[Map[String, Any]]] = {
+  def getAllDocuments: Future[Array[Article]] = {
     Future {
       couchInstance { db =>
-        val newQueryView = new ViewQuery().allDocs().includeDocs(true)
-        val result = db.queryView(newQueryView)
-        val rawDocuments = result.getRows
-        rawDocuments.toArray.map(row => jsonStrToMap(row.toString))
+        val articleRepo = new ArticleRepository(db)
+        articleRepo.getAll.asScala.toArray
       }
     }
   }
@@ -69,22 +67,9 @@ class Operations extends CouchConnection {
 
   def getDocumentByID(id: String): Article = {
     couchInstance { db =>
-      val document = db.get(classOf[java.util.Map[String, AnyRef]], id)
-      val rawTagsOfDoc = document.get("tags")
-      val tagsOfDoc: Array[String] = rawTagsOfDoc match {
-        case seqTag: java.util.ArrayList[String] => seqTag.asScala.toArray
-        case _ => Array.empty[String]
-      }
-      Article(
-        id = Some(document.getOrDefault("_id", null).toString),
-        revision = Some(document.getOrDefault("_rev", null).toString),
-        name = document.getOrDefault("name", null).toString,
-        description = document.getOrDefault("description", null).toString,
-        text_en = Some(document.getOrDefault("text_en", null).toString),
-        text_pt = Some(document.getOrDefault("text_pt", null).toString),
-        tags = tagsOfDoc,
-        updated_at=Some(document.getOrDefault("updated_at",null).toString)
-      )
+      val ArticleRepo = new ArticleRepository(db)
+      val document:Article = ArticleRepo.get(id)
+      document
     }
   }
 

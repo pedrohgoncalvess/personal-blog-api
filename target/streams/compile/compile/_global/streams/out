@@ -1,18 +1,9 @@
 [0m[[0m[33mwarn[0m] [0m[0m/app/src/main/scala/api/routes/articles/Get.scala:12:16: Implicit definition should have explicit type (inferred org.json4s.DefaultFormats.type) [quickfixable][0m
 [0m[[0m[33mwarn[0m] [0m[0m  implicit val formats = org.json4s.DefaultFormats[0m
 [0m[[0m[33mwarn[0m] [0m[0m               ^[0m
-[0m[[0m[33mwarn[0m] [0m[0m/app/src/main/scala/database/Connection.scala:24:5: A try without a catch or finally is equivalent to putting its body in a block; no exceptions are handled.[0m
+[0m[[0m[33mwarn[0m] [0m[0m/app/src/main/scala/database/Connection.scala:21:5: A try without a catch or finally is equivalent to putting its body in a block; no exceptions are handled.[0m
 [0m[[0m[33mwarn[0m] [0m[0m    try {[0m
 [0m[[0m[33mwarn[0m] [0m[0m    ^[0m
-[0m[[0m[33mwarn[0m] [0m[0m/app/src/main/scala/database/Operations.scala:75:32: non-variable type argument String in type pattern java.util.ArrayList[String] is unchecked since it is eliminated by erasure[0m
-[0m[[0m[33mwarn[0m] [0m[0m        case seqTag: java.util.ArrayList[String] => seqTag.asScala.toArray[0m
-[0m[[0m[33mwarn[0m] [0m[0m                               ^[0m
-[0m[[0m[33mwarn[0m] [0m[0m/app/src/main/scala/main.scala:15:16: Implicit definition should have explicit type (inferred org.json4s.DefaultFormats.type) [quickfixable][0m
-[0m[[0m[33mwarn[0m] [0m[0m  implicit val formats = org.json4s.DefaultFormats[0m
-[0m[[0m[33mwarn[0m] [0m[0m               ^[0m
-[0m[[0m[33mwarn[0m] [0m[0m/app/src/main/scala/main.scala:30:18: Implicit definition should have explicit type (inferred akka.actor.typed.ActorSystem[Any]) [quickfixable][0m
-[0m[[0m[33mwarn[0m] [0m[0m    implicit val system = ActorSystem(Behaviors.empty, "CthaehBlogApi")[0m
-[0m[[0m[33mwarn[0m] [0m[0m                 ^[0m
 [0m[[0m[33mwarn[0m] [0m[0m/app/src/main/scala/api/models/Auth.scala:21:52: a pure expression does nothing in statement position[0m
 [0m[[0m[33mwarn[0m] [0m[0m  @JsonSetter("_id") def setId(id: String): Unit = id[0m
 [0m[[0m[33mwarn[0m] [0m[0m                                                   ^[0m
@@ -20,6 +11,6 @@
 [0m[[0m[33mwarn[0m] [0m[0m  @JsonSetter("_rev") def setRevision(rev: String): Unit = rev[0m
 [0m[[0m[33mwarn[0m] [0m[0m                                                           ^[0m
 [0m[[0m[33mwarn[0m] [0m[0m3 deprecations (since 2.11.0)[0m
-[0m[[0m[33mwarn[0m] [0m[0m2 deprecations (since 2.13.0)[0m
-[0m[[0m[33mwarn[0m] [0m[0m5 deprecations in total; re-run with -deprecation for details[0m
-[0m[[0m[33mwarn[0m] [0m[0m10 warnings found[0m
+[0m[[0m[33mwarn[0m] [0m[0m1 deprecation (since 2.13.0)[0m
+[0m[[0m[33mwarn[0m] [0m[0m4 deprecations in total; re-run with -deprecation for details[0m
+[0m[[0m[33mwarn[0m] [0m[0m7 warnings found[0m
