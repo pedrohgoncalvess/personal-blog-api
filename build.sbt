@@ -25,5 +25,6 @@ libraryDependencies ++= Seq(
   "org.json4s" %% "json4s-native" % "4.0.7",
   "com.typesafe" % "config" % "1.4.2",
   "com.password4j" % "password4j" % "1.7.3",
-  "ch.qos.logback" % "logback-classic" % "1.4.13" % Test
+  "ch.qos.logback" % "logback-classic" % "1.4.13" % Test,
+  "ch.megard" %% "akka-http-cors" % "1.2.0"
 )
