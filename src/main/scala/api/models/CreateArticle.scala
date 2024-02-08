@@ -8,7 +8,7 @@ import spray.json.RootJsonFormat
 
 trait CreateArticleJsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
 
-  implicit val createArticleFormat: RootJsonFormat[CreateArticle] = jsonFormat8(CreateArticle.apply)
+  implicit val createArticleFormat: RootJsonFormat[CreateArticle] = jsonFormat9(CreateArticle.apply)
 }
 
 case class CreateArticle(var id: Option[String],
@@ -18,6 +18,7 @@ case class CreateArticle(var id: Option[String],
                          var text_pt: Option[String],
                          var text_en: Option[String],
                          var tags:Array[String],
+                         var is_published:Boolean,
                          var updated_at: Option[String]
                         ) {
 
@@ -39,6 +40,8 @@ case class CreateArticle(var id: Option[String],
 
   @JsonSetter def setTags(s: Array[String]): Unit = tags = s
 
+  @JsonSetter def setIs_published(s: Boolean): Unit = is_published = s
+
   @JsonSetter def setUpdated_at(s: String): Unit = updated_at = Some(s)
 
   @JsonGetter def getName: String = name
@@ -51,8 +54,10 @@ case class CreateArticle(var id: Option[String],
 
   @JsonGetter def getTags: Array[String] = tags
 
+  @JsonGetter def getIs_published: Boolean = is_published
+
   @JsonGetter def getUpdated_at: String = updated_at.get
 
-  def this() = this(Some(""), Some(""), "", "", None, None, Array.empty, Some(""))
+  def this() = this(Some(""), Some(""), "", "", None, None, Array.empty, false, Some(""))
 }
 

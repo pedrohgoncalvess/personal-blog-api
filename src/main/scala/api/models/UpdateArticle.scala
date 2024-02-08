@@ -8,10 +8,12 @@ case class UpdateArticle(id:String,
                          description:Option[String],
                          text_pt:Option[String],
                          text_en:Option[String],
-                         tags:Option[Array[String]])
+                         tags:Option[Array[String]],
+                         is_published:Boolean,
+                        )
 
 trait UpdateArticleJsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
 
-  implicit val articleToUpdateFormat: RootJsonFormat[UpdateArticle] = jsonFormat6(UpdateArticle.apply)
+  implicit val articleToUpdateFormat: RootJsonFormat[UpdateArticle] = jsonFormat7(UpdateArticle.apply)
 
 }

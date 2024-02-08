@@ -13,6 +13,7 @@ import org.ektorp.support.{CouchDbRepositorySupport, GenerateView, TypeDiscrimin
 @Views(
   Array(
     new View(name="by_name", map="function(doc) {if (doc.name) {emit(doc.name.toLowerCase(), doc);}}"),
+    new View(name="by_is_published", map="function(doc) {if (doc.published != null) {emit(doc.published, doc);}}"),
     new View(name="by_tag", map="function(doc) {if (doc.tags) {doc.tags.forEach(function(tag) {emit(tag.toLowerCase(), doc);});}}")
   )
 )
@@ -23,6 +24,7 @@ case class Article(@JsonProperty var id: Option[String],
                    @JsonProperty var text_pt: Option[String],
                    @JsonProperty var text_en: Option[String],
                    @JsonRawValue var tags:Array[String],
+                   @JsonProperty var published: Boolean,
                    @JsonProperty var updated_at: Option[String]
                   ) {
 
@@ -41,6 +43,8 @@ case class Article(@JsonProperty var id: Option[String],
 
   @JsonSetter def setTags(s: Array[String]):Unit = tags = s
 
+  @JsonSetter def setPublished(s: Boolean):Unit = published = s
+
   @JsonSetter def setUpdated_at(s: String): Unit = updated_at = Some(s)
 
   @JsonGetter def getName: String = name
@@ -48,9 +52,10 @@ case class Article(@JsonProperty var id: Option[String],
   @JsonGetter def getText_pt: String = text_pt.get
   @JsonGetter def getText_en: String = text_en.get
   @JsonGetter def getTags:Array[String] = tags
+  @JsonGetter def getPublished: Boolean = published
   @JsonGetter def getUpdated_at: String = updated_at.get
 
-  def this() = this(Some(""), Some(""), "", "", None, None, Array.empty, Some(""))
+  def this() = this(Some(""), Some(""), "", "", None, None, Array.empty, false, Some(""))
 
 }
 
@@ -58,12 +63,13 @@ class ArticleRepository(db: CouchDbConnector) extends CouchDbRepositorySupport[A
   initStandardDesignDocument()
 
   @GenerateView def findByTag(tag: String): java.util.List[Article] = queryView("by_tag", tag.toLowerCase())
+  @GenerateView def findByPublished: java.util.List[Article] = queryView("by_is_published","true")
 
 }
 
 trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
 
-  implicit val articleFormat: RootJsonFormat[Article] = jsonFormat8(Article.apply)
+  implicit val articleFormat: RootJsonFormat[Article] = jsonFormat9(Article.apply)
   implicit val orderFormat: RootJsonFormat[Articles] = jsonFormat1(Articles.apply)
 }
 
