@@ -45,31 +45,23 @@ class Operations extends CouchConnection {
     }
   }
 
-  def getDocumentsByTag(tag: String): Array[Map[String, Serializable]] = {
-    couchInstance { db =>
-      val articleRepo = new ArticleRepository(db)
-      val articlesToReturn = articleRepo.findByTag(tag.toLowerCase())
-      if (articlesToReturn.isEmpty) {
-        throw new DocumentNotFoundException(null)
+  def getDocumentsByTag(tag: String): Future[Array[Article]] = {
+    Future {
+      couchInstance { db =>
+        val articleRepo = new ArticleRepository(db)
+        val articlesToReturn: java.util.List[Article] = articleRepo.findByTag(tag.toLowerCase())
+        articlesToReturn.map(article => article).toArray
       }
-      val mapsToReturn = articlesToReturn.map(article =>
-        Map(
-          "name" -> article.name,
-          "description" -> article.description,
-          "text_en" -> article.text_en.getOrElse("null"),
-          "text_pt" -> article.text_pt.getOrElse("null"),
-          "updated_at" -> article.updated_at.getOrElse("null"),
-          "tags" -> article.tags
-        ))
-      mapsToReturn.toArray
     }
   }
 
-  def getDocumentByID(id: String): Article = {
-    couchInstance { db =>
-      val ArticleRepo = new ArticleRepository(db)
-      val document:Article = ArticleRepo.get(id)
-      document
+  def getDocumentByID(id: String): Future[Article] = {
+    Future {
+      couchInstance { db =>
+        val ArticleRepo = new ArticleRepository(db)
+        val document: Article = ArticleRepo.get(id)
+        document
+      }
     }
   }
 
