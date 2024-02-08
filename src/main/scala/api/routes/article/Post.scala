@@ -27,6 +27,7 @@ class Post extends Directives with CreateArticleJsonSupport {
               description = article.description,
               text_pt = article.text_pt,
               text_en = article.text_en,
+              is_published=article.is_published,
               tags = article.tags,
               updated_at = Some(LocalDateTime.now().toString)
             )
