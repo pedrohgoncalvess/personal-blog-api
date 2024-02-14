@@ -1,9 +1,9 @@
-package api.models
+package database.models
 
 import com.fasterxml.jackson.annotation.{JsonGetter, JsonIgnoreProperties}
+import org.codehaus.jackson.annotate.{JsonProperty, JsonSetter}
 import org.ektorp.CouchDbConnector
 import org.ektorp.support.{CouchDbRepositorySupport, GenerateView, TypeDiscriminator, View}
-import org.codehaus.jackson.annotate.{JsonProperty, JsonSetter}
 
 
 @JsonIgnoreProperties(ignoreUnknown=true)
