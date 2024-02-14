@@ -2,7 +2,7 @@ package database.operations
 
 import api.json.{CreateArticle, UpdateArticle}
 import database.CouchConnection
-import database.models.ArticleRepository
+import database.models.{Article, ArticleRepository}
 import org.ektorp.DocumentNotFoundException
 import java.time.LocalDateTime
 import scala.collection.JavaConverters._
@@ -10,7 +10,7 @@ import scala.collection.convert.ImplicitConversions.`collection AsScalaIterable`
 import scala.concurrent.Future
 
 
-class Article extends CouchConnection {
+class ArticleQ extends CouchConnection {
 
   import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -21,8 +21,7 @@ class Article extends CouchConnection {
         Future.successful()
       } catch {
         case ex: Throwable =>
-          println(ex)
-          Future.failed(new Exception("An error occurred."))
+          Future.failed(new Exception(ex.getMessage))
       }
     }
   }
