@@ -1,9 +1,9 @@
 package api.utils
 
 import akka.http.scaladsl.server.directives.Credentials
-import api.models.User
 import com.password4j.Password
-import database.Operations
+import database.models.User
+import database.operations.AuthQ
 
 class Authentication {
 
@@ -12,7 +12,7 @@ class Authentication {
   }
 
   def myUserPassAuthenticator(credentials: Credentials): Option[User] = {
-    val opr = new Operations
+    val opr = new AuthQ
     credentials match {
       case p@Credentials.Provided(id) if p.provideVerify(opr.getUserByUsername(id).password,verifier=verifyPassword) =>
         val user = opr.getUserByUsername(id)
