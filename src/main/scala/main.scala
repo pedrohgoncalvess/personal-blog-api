@@ -5,9 +5,8 @@ import akka.http.scaladsl.server.{Directives, Route}
 import api.routes
 import api.routes.Get
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
-import database.Operations
+import database.operations.ArticleQ
 import org.json4s.DefaultFormats
-
 import scala.concurrent.ExecutionContextExecutor
 import scala.io.StdIn
 
@@ -16,7 +15,7 @@ class Routes extends Directives {
 
   implicit val formats: DefaultFormats.type = org.json4s.DefaultFormats
 
-  val dbOperations = new Operations
+  val dbOperations = new ArticleQ
 
   val articleGetRoute = new routes.article.Get
   val articleDeleteRoute = new routes.article.Delete
