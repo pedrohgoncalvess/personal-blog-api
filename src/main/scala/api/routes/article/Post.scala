@@ -2,16 +2,16 @@ package api.routes.article
 
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives
-import api.models.{CreateArticle, CreateArticleJsonSupport}
+import api.json.{CreateArticle, CreateArticleJsonSupport}
 import api.utils.Authentication
-import database.Operations
+import database.operations.ArticleQ
 import java.time.LocalDateTime
 import scala.concurrent.Future
 
 
 class Post extends Directives with CreateArticleJsonSupport {
 
-  val dbOperations = new Operations
+  val dbOperations = new ArticleQ
   val auth = new Authentication
 
   val route =

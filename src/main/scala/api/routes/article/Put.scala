@@ -1,9 +1,9 @@
 package api.routes.article
 
 import akka.http.scaladsl.server.Directives
-import api.models._
+import api.json._
 import api.utils.{Authentication, exceptionHandlers}
-import database.Operations
+import database.operations.ArticleQ
 import org.json4s.DefaultFormats
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
@@ -12,7 +12,7 @@ class Put extends Directives with UpdateArticleJsonSupport {
 
   implicit val formats: DefaultFormats.type = org.json4s.DefaultFormats
 
-  val dbOperations = new Operations
+  val dbOperations = new ArticleQ
   val auth = new Authentication
 
   val route =

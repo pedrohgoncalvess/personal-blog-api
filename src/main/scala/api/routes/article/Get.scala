@@ -3,7 +3,7 @@ package api.routes.article
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.{Directives, Route}
 import api.utils.{Authentication, exceptionHandlers}
-import database.Operations
+import database.operations.ArticleQ
 import org.ektorp.DocumentNotFoundException
 import org.json4s.DefaultFormats
 import org.json4s.native.Serialization
@@ -14,7 +14,7 @@ class Get extends Directives {
 
   implicit val formats: DefaultFormats.type = org.json4s.DefaultFormats
 
-  val dbOperations = new Operations
+  val dbOperations = new ArticleQ
   val auth = new Authentication
 
   val route: Route = concat(
