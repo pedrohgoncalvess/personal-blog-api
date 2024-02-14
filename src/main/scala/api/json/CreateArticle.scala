@@ -1,4 +1,4 @@
-package api.models
+package api.json
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import com.fasterxml.jackson.annotation.JsonGetter
@@ -11,7 +11,8 @@ trait CreateArticleJsonSupport extends SprayJsonSupport with DefaultJsonProtocol
   implicit val createArticleFormat: RootJsonFormat[CreateArticle] = jsonFormat9(CreateArticle.apply)
 }
 
-case class CreateArticle(var id: Option[String],
+case class CreateArticle(
+                         var id: Option[String],
                          var revision: Option[String],
                          var name: String,
                          var description: String,

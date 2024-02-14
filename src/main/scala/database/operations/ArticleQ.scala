@@ -1,24 +1,16 @@
-package database
+package database.operations
 
-import api.models.{User, UserRepository}
-import api.models.{Article, ArticleRepository, CreateArticle, UpdateArticle}
-import org.json4s.native.JsonParser
-import org.ektorp.{DocumentNotFoundException, ViewQuery}
-import org.json4s.DefaultFormats
+import api.json.{CreateArticle, UpdateArticle}
+import database.CouchConnection
+import database.models.ArticleRepository
+import org.ektorp.DocumentNotFoundException
 import java.time.LocalDateTime
 import scala.collection.JavaConverters._
 import scala.collection.convert.ImplicitConversions.`collection AsScalaIterable`
 import scala.concurrent.Future
 
 
-class Operations extends CouchConnection {
-
-  def jsonStrToMap(jsonStr: String): Map[String, Any] = {
-
-    implicit val formats: DefaultFormats.type = org.json4s.DefaultFormats
-
-    JsonParser.parse(jsonStr).extract[Map[String, Any]]
-  }
+class Article extends CouchConnection {
 
   import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -98,14 +90,6 @@ class Operations extends CouchConnection {
         }
       }
     })
-  }
-
-  def getUserByUsername(username:String): User = {
-  couchInstance({db =>
-    val newUserRepo = new UserRepository(db)
-    val user = newUserRepo.findByUsername(username)
-    user
-  })
   }
 }
 

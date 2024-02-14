@@ -1,15 +1,14 @@
-package api.models
+package database.models
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import spray.json.{DefaultJsonProtocol, RootJsonFormat}
 import com.fasterxml.jackson.annotation.{JsonGetter, JsonIgnoreProperties, JsonRawValue}
 import org.codehaus.jackson.annotate.{JsonProperty, JsonSetter}
 import org.ektorp.CouchDbConnector
-import org.ektorp.support.{CouchDbRepositorySupport, GenerateView, TypeDiscriminator, View, Views}
+import org.ektorp.support.{CouchDbRepositorySupport, GenerateView, View, Views}
+import spray.json.{DefaultJsonProtocol, RootJsonFormat}
 
 
 @JsonIgnoreProperties(ignoreUnknown=true)
-@TypeDiscriminator("doc.type == 'UserAuth'")
 @Views(
   Array(
     new View(name="by_name", map="function(doc) {if (doc.name) {emit(doc.name.toLowerCase(), doc);}}"),
