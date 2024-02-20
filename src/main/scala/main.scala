@@ -22,9 +22,9 @@ class Routes extends Directives {
   val articlePostRoute = new routes.article.Post
   val articlePutRoute = new routes.article.Put
   val articlesGetRoute = new Get //routes.articles.Get //problem importing, probably caused by routes.article.Get
-  val authGetRoute = new routes.auth.Get
+  val authPostRoute = new routes.auth.Post
 
-  val route: Route = cors() { concat(articleGetRoute.route, articleDeleteRoute.route, articlePostRoute.route, articlePutRoute.route, articlesGetRoute.route, authGetRoute.route) }
+  val route: Route = cors() { concat(articleGetRoute.route, articleDeleteRoute.route, articlePostRoute.route, articlePutRoute.route, articlesGetRoute.route, authPostRoute.route) }
 }
 
 
