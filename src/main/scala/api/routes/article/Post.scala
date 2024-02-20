@@ -5,8 +5,10 @@ import akka.http.scaladsl.server.Directives
 import api.json.{CreateArticle, CreateArticleJsonSupport}
 import api.utils.Authentication
 import database.operations.ArticleQ
+
 import java.time.LocalDateTime
 import scala.concurrent.Future
+import scala.util.{Failure, Success}
 
 
 class Post extends Directives with CreateArticleJsonSupport {
@@ -16,8 +18,8 @@ class Post extends Directives with CreateArticleJsonSupport {
 
   val route =
     path("article") {
-    authenticateBasic(realm = "secure site", auth.myUserPassAuthenticator) { user =>
-      authorize(user.admin) {
+      authenticateOAuth2(realm = "secure site", auth.myUserPassAuthenticator) { auth =>
+      authorize(auth) {
         post {
           entity(as[CreateArticle]) { article =>
             val newCouchArticle = CreateArticle(
@@ -27,13 +29,14 @@ class Post extends Directives with CreateArticleJsonSupport {
               description = article.description,
               text_pt = article.text_pt,
               text_en = article.text_en,
-              is_published=article.is_published,
+              published=article.published,
               tags = article.tags,
               updated_at = Some(LocalDateTime.now().toString)
             )
             val resultOfOperation: Future[Unit] = dbOperations.addNewDocument(newCouchArticle)
-            onSuccess(resultOfOperation) {
-              complete(StatusCodes.Created)
+            onComplete(resultOfOperation) {
+              case Success(_) => complete(StatusCodes.Created)
+              case Failure(exception) => complete(StatusCodes.InternalServerError, exception.getMessage)
             }
           }
         }

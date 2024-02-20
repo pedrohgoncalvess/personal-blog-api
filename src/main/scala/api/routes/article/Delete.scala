@@ -19,8 +19,8 @@ class Delete extends Directives with JsonSupport {
   val route =
     path("article") {
       delete {
-        authenticateBasic(realm = "secure site", auth.myUserPassAuthenticator) { user =>
-          authorize(user.admin) {
+        authenticateOAuth2(realm = "secure site", auth.myUserPassAuthenticator) { auth =>
+          authorize(auth) {
             handleExceptions(exceptionHandlers.articleDeleteExceptionHandler) {
               parameter("id".as[String], "revision".as[String]) { (id, revision) =>
                 validate(id.isEmpty || revision.isEmpty, null) {

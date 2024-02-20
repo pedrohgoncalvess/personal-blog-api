@@ -18,11 +18,10 @@ class Put extends Directives with UpdateArticleJsonSupport {
   val route =
     path("article") {
       handleExceptions(exceptionHandlers.articleUpdateExceptionHandler) {
-        authenticateBasic(realm = "secure site", auth.myUserPassAuthenticator) { user =>
-          authorize(user.admin) {
+        authenticateOAuth2(realm = "secure site", auth.myUserPassAuthenticator) { auth =>
+          authorize(auth) {
             put {
               entity(as[UpdateArticle]) { article =>
-
                 val updateResultOperation: Future[Unit] = dbOperations.updateDocumentByID(article)
                 onComplete(updateResultOperation) {
                   case Success(_) => complete(s"Document updated.")
