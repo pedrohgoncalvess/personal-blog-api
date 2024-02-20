@@ -19,8 +19,8 @@ class Get extends Directives {
   val route: Route = concat(
     path("articles") {
       handleExceptions(exceptionHandlers.articleExceptionHandler) {
-        authenticateBasic(realm = "secure site", auth.myUserPassAuthenticator) { user =>
-          authorize(user.admin) {
+        authenticateBasic(realm = "secure site", auth.myUserPassAuthenticator) { auth =>
+          authorize(auth) {
             get {
               parameter("tag".as[String].optional) { tag =>
 
