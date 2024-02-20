@@ -81,6 +81,7 @@ class ArticleQ extends CouchConnection {
           oldDocument.text_en = Some(articleUpdate.text_en.getOrElse(oldDocument.getText_en))
           oldDocument.tags = articleUpdate.tags.getOrElse(oldDocument.tags)
           oldDocument.updated_at = Some(LocalDateTime.now().toString)
+          oldDocument.published = articleUpdate.published
           db.update(oldDocument)
           Future.successful()
         } catch {
