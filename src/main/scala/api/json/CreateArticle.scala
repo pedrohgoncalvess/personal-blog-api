@@ -19,7 +19,7 @@ case class CreateArticle(
                          var text_pt: Option[String],
                          var text_en: Option[String],
                          var tags:Array[String],
-                         var is_published:Boolean,
+                         var published:Boolean,
                          var updated_at: Option[String]
                         ) {
 
@@ -41,7 +41,7 @@ case class CreateArticle(
 
   @JsonSetter def setTags(s: Array[String]): Unit = tags = s
 
-  @JsonSetter def setIs_published(s: Boolean): Unit = is_published = s
+  @JsonSetter def setPublished(s: Boolean): Unit = published = s
 
   @JsonSetter def setUpdated_at(s: String): Unit = updated_at = Some(s)
 
@@ -55,7 +55,7 @@ case class CreateArticle(
 
   @JsonGetter def getTags: Array[String] = tags
 
-  @JsonGetter def getIs_published: Boolean = is_published
+  @JsonGetter def getPublished: Boolean = published
 
   @JsonGetter def getUpdated_at: String = updated_at.get
 

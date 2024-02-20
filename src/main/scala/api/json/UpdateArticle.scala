@@ -9,7 +9,7 @@ case class UpdateArticle(id:String,
                          text_pt:Option[String],
                          text_en:Option[String],
                          tags:Option[Array[String]],
-                         is_published:Boolean,
+                         published:Boolean,
                         )
 
 trait UpdateArticleJsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
