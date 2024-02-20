@@ -16,7 +16,8 @@ class TokenQ extends CouchConnection {
           db.create(token)
           Future.successful()
         } catch {
-          case ex: Throwable => Future.failed(throw new Exception(ex.getMessage))
+          case ex: Throwable =>
+            Future.failed(throw new Exception(ex.getMessage))
         }
       }
     }
@@ -27,7 +28,6 @@ class TokenQ extends CouchConnection {
       couchInstance{ db =>
         val tokenRepo = new TokenRepository(db)
         tokenRepo.findByToken(token)
-
       }
     }
   }
