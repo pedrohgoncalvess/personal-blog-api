@@ -9,7 +9,7 @@ services:
       - COUCHDB_USER=admin
       - COUCHDB_PASSWORD=admin
     volumes:
-      - ./dbdata:/opt/couchdb/data
+      - ./dbdata:/opt/couchdb/data\
     networks:
       - my-network
 
