@@ -26,5 +26,6 @@ libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.4.2",
   "com.password4j" % "password4j" % "1.7.3",
   "ch.qos.logback" % "logback-classic" % "1.4.13" % Test,
-  "ch.megard" %% "akka-http-cors" % "1.2.0"
+  "ch.megard" %% "akka-http-cors" % "1.2.0",
+  "com.nimbusds" % "nimbus-jose-jwt" % "9.7"
 )
