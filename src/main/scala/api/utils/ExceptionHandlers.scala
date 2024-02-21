@@ -60,6 +60,3 @@ object exceptionHandlers {
     }
   }
 }
-
-
-class DocumentWithoutId(message:String) extends Exception(message)

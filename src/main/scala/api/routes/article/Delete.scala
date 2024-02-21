@@ -26,7 +26,6 @@ class Delete extends Directives with JsonSupport {
                 validate(id.isEmpty || revision.isEmpty, null) {
                   throw new java.util.NoSuchElementException
                 }
-
                 val deleteResultOperation: Future[Unit] = dbOperations.deleteDocumentByID(id, revision)
                 onComplete(deleteResultOperation) {
                   case Success(_) => complete(s"Document deleted")
