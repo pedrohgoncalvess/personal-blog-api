@@ -15,3 +15,8 @@ akka-http-cors {
   allowed-headers = ["*"]
   allow-credentials = true
 }
+
+#i will remove it later
+MODULUS_KEY = jwt modulus
+PRIVATE_EXPONENT = private exponent of key
+PUBLIC_EXPONENT = public exponent of public
