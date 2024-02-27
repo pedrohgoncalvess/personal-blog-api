@@ -1,7 +1,7 @@
 package api.routes.article
 
 import akka.http.scaladsl.server.Directives
-import api.utils.{Authentication, exceptionHandlers}
+import api.utils.{AuthValidators, exceptionHandlers}
 import database.models.JsonSupport
 import database.operations.ArticleQ
 import org.json4s.DefaultFormats
@@ -14,7 +14,7 @@ class Delete extends Directives with JsonSupport {
   implicit val formats: DefaultFormats.type = org.json4s.DefaultFormats
 
   val dbOperations = new ArticleQ
-  val auth = new Authentication
+  val auth = new AuthValidators
 
   val route =
     path("article") {
