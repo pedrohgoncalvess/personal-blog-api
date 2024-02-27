@@ -7,13 +7,13 @@ import org.ektorp.support.{CouchDbRepositorySupport, GenerateView, View}
 
 @JsonIgnoreProperties(ignoreUnknown=true)
 @View(name = "by_token", map = "function(doc) {if (doc.token) {emit(doc.token, doc);}}")
-case class Token(
-                @JsonProperty("_id") var id: Option[String],
-                @JsonProperty("_rev") var revision: Option[String],
-                @JsonProperty var token:String,
-                @JsonProperty var user:String,
-                @JsonProperty var created_at:String = java.time.LocalDateTime.now().toString,
-                @JsonProperty var expire:String = java.time.LocalDateTime.now().plusMinutes(120).toString
+case class RefreshToken(
+                 var id: Option[String],
+                 var revision: Option[String],
+                 var token:String,
+                 var user:String,
+                 var created_at:String = java.time.LocalDateTime.now().toString,
+                 var expire:String = java.time.LocalDateTime.now().plusMinutes(360).toString
                 ) {
   @JsonGetter("_id") def getId: Option[String] = id
 
@@ -34,8 +34,8 @@ case class Token(
   def this() = this(Some(""),Some(""),"","","","")
 }
 
-class TokenRepository(db: CouchDbConnector) extends CouchDbRepositorySupport[Token](classOf[Token], db) {
+class TokenRepository(db: CouchDbConnector) extends CouchDbRepositorySupport[RefreshToken](classOf[RefreshToken], db) {
   initStandardDesignDocument()
 
-  @GenerateView def findByToken(token: String): Token = queryView("by_token", token).get(0)
+  @GenerateView def findByToken(token: String): RefreshToken = queryView("by_token", token).get(0)
 }

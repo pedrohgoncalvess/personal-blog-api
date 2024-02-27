@@ -1,15 +1,14 @@
 package database.operations
 
 import database.CouchConnection
-import database.models.{Token, TokenRepository}
-
+import database.models.{RefreshToken, TokenRepository}
 import scala.concurrent.Future
 
-class TokenQ extends CouchConnection {
+class RefreshTokenQ extends CouchConnection {
 
   import scala.concurrent.ExecutionContext.Implicits.global
 
-  def addNewToken(token:Token): Future[Unit] = {
+  def addNewRefreshToken(token:RefreshToken): Future[Unit] = {
     Future {
       couchInstance { db =>
         try {
@@ -23,7 +22,7 @@ class TokenQ extends CouchConnection {
     }
   }
 
-  def getTokenByToken(token:String): Future[Token] = {
+  def getRefreshTokenByToken(token:String): Future[RefreshToken] = {
     Future {
       couchInstance{ db =>
         val tokenRepo = new TokenRepository(db)
