@@ -38,7 +38,7 @@ class Post extends Directives with RefreshTokenJsonSupport {
                   onComplete(insertNewRefreshToken) {
                     case Success(_) => complete(StatusCodes.OK, Map(
                       "auth_token" -> Map("token" -> newToken._1, "expiration_time" -> newToken._2),
-                      "refresh_token" -> Map("refresh_token" -> refreshToken.token, "expiration_time" -> refreshToken.expire)
+                      "refresh_token" -> Map("token" -> refreshToken.token, "expiration_time" -> refreshToken.expire)
                     ))
                     case Failure(exception: Exception) => complete(StatusCodes.InternalServerError, exception.getMessage)
                   }
