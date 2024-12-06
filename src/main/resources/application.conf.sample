@@ -1,8 +1,15 @@
-DB_HOST = database host
-DB_PORT = database port
-DB_NAME = database name
-DB_USERNAME = database admin user
-DB_PASSWORD = admin user password
+postgres = {
+    connectionPool = "HikariCP"
+    dataSourceClass = "org.postgresql.ds.PGSimpleDataSource"
+    properties = {
+         serverName = localhost
+         portNumber = 5435
+         databaseName = postgres
+         user = postgres
+         password = admin
+    }
+    numThreads = 10
+}
 
 akka {
     loggers = ["akka.event.Logging$DefaultLogger"]
@@ -17,6 +24,6 @@ akka-http-cors {
 }
 
 #i will remove it later
-MODULUS_KEY = jwt modulus
-PRIVATE_EXPONENT = private exponent of key
-PUBLIC_EXPONENT = public exponent of public
+MODULUS_KEY =
+PRIVATE_EXPONENT =
+PUBLIC_EXPONENT =
