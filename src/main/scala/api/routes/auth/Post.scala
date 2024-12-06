@@ -1,43 +1,63 @@
 package api.routes.auth
 
-import akka.http.scaladsl.model.StatusCodes
-import akka.http.scaladsl.server.{Directives, Route}
-import api.json.{Auth, AuthJsonSupport}
-import api.utils.AuthValidators
-import com.password4j.Password
-import database.operations.{AuthQ, RefreshTokenQ}
-import java.util.UUID
-import database.models.RefreshToken
-import scala.concurrent.Future
+
+import java.time.LocalDateTime
 import scala.util.{Failure, Success}
 
+import akka.http.scaladsl.model.StatusCodes
+import akka.http.scaladsl.server.{Directives, Route}
+import com.password4j.Password
+import spray.json.*
+import java.util.{Base64, UUID}
 
-class Post extends Directives with AuthJsonSupport {
+import api.utils.AuthValidators
+import api.utils.AuthValidators.generateAccessToken
+import database.models.sys.{RefreshToken, User}
+import database.models.sys.operations.{getUserByUsername, insertRefreshToken}
 
-  val authOpr = new AuthQ
-  val authValidators = new AuthValidators
+
+class Post extends Directives with AuthJsonSupport:
+
+  private def decodeBase64(encoded: String): String =
+    val decoder = Base64.getDecoder
+    val decodedBytes = decoder.decode(encoded)
+    new String(decodedBytes, "UTF-8")
 
   val route: Route =
     path("auth") {
       post {
-        entity(as[Auth]) { auth =>
-          val user = authOpr.getUserByUsername(auth.username)
-          if (Password.check(auth.password, user.password).withArgon2()) {
-            val infoToken = authValidators.generateAccessToken(user.id, user.admin)
-            val refreshToken = RefreshToken(token=UUID.randomUUID().toString, user=auth.username, id=null, revision=null)
-            val refreshTokenOpr = new RefreshTokenQ
-            val insertNewRefreshToken: Future[Unit] = refreshTokenOpr.addNewRefreshToken(refreshToken)
-            onComplete(insertNewRefreshToken) {
-              case Success(_) => complete(StatusCodes.OK, Map(
-                "auth_token" -> Map("token" -> infoToken._1, "expiration_time" -> infoToken._2),
-                "refresh_token" -> Map("refresh_token" -> refreshToken.token, "expiration_time" -> refreshToken.expire)
-              ))
-              case Failure(exception: Exception) => complete(StatusCodes.InternalServerError, exception.getMessage)
-            }
-          } else {
-            complete(StatusCodes.Unauthorized)
+        entity(as[Credentials]) { auth =>
+          val userOp = getUserByUsername(auth.username)
+          onComplete(userOp) {
+            case Success(possUser) =>
+              if (possUser.orNull == null)
+                complete(StatusCodes.Unauthorized)
+              else
+                val user: User = possUser.get
+                val userPassDecoded:String = decodeBase64(auth.password)
+                if (Password.check(userPassDecoded, new String(user.password)).withArgon2()) {
+                  val newToken = generateAccessToken(user.id.get, user.admin)
+                  val refreshToken = RefreshToken(id=Some(UUID.randomUUID()), token=UUID.randomUUID(), id_user=user.id.get, created_at=Some(LocalDateTime.now))
+                  val insertToken = insertRefreshToken(refreshToken)
+                  onComplete(insertToken) {
+                    case Success(_) =>
+                      val authToken = AuthTokenJson(newToken._1, newToken._2)
+                      val retRefreshToken = RefreshTokenJson(refreshToken.token, refreshToken.created_at.get.plusHours(5))
+                      complete(
+                        StatusCodes.Created,
+                        JsObject(
+                          "auth" -> authToken.toJson,
+                          "refresh" -> retRefreshToken.toJson
+                        )
+                      )
+
+                    case Failure(e) => complete(StatusCodes.InternalServerError, "An error occurred.")
+                  }
+                } else {
+                  complete(StatusCodes.Unauthorized)
+                }
+            case Failure(_) => complete(StatusCodes.InternalServerError, "An error ocurred.")
           }
         }
       }
     }
-}
