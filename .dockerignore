@@ -2,3 +2,6 @@ test
 src/main/resources/application.conf.sample
 readme.md
 .gitignore
+target
+project/target
+*.pem

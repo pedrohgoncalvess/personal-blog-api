@@ -1,17 +1,17 @@
 version: '3'
 services:
-  couchserver:
-    image: couchdb
+  template-db:
+    image: postgres
     restart: always
-    ports:
-      - "5984:5984"
     environment:
-      - COUCHDB_USER=admin
-      - COUCHDB_PASSWORD=admin
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+    ports:
+      - "5435:5432"
     volumes:
-      - ./dbdata:/opt/couchdb/data\
+      - pg_data:/var/lib/postgresql/data
     networks:
-      - my-network
+      - standard-network
 
   akka-api:
     build: .
@@ -23,10 +23,13 @@ services:
     stdin_open: true #studie better this
     tty: true #and this too
     depends_on:
-      - couchserver
+      - template-db
     networks:
-      - my-network
-    command: ["sbt", "clean", "run"]
+      - standard-network
+    command: [ "sbt", "-J-Xms256m", "-J-Xmx412m", "-J-XX:+UseG1GC", "-J-XX:MaxGCPauseMillis=100", "-J-XX:ParallelGCThreads=2", "run" ]
 
 networks:
-  my-network:
+  standard-network:
+
+volumes:
+  pg_data:

@@ -1,4 +1,4 @@
-FROM hseeberger/scala-sbt:8u302_1.5.5_2.13.6
+FROM sbtscala/scala-sbt:graalvm-community-21.0.2_1.10.0_3.4.2
 
 WORKDIR /app
 
