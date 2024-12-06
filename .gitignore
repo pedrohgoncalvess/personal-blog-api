@@ -1,2 +1,7 @@
 dbdata
 src/main/resources/application.conf
+.idea
+.bsp
+target
+project/target
+*.pem
