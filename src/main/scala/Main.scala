@@ -1,13 +1,14 @@
 import scala.concurrent.ExecutionContextExecutor
 import scala.io.StdIn
+
 import akka.actor.typed.ActorSystem
 import akka.actor.typed.scaladsl.Behaviors
 import akka.http.scaladsl.Http
+
 import akka.http.scaladsl.server.{Directives, Route}
 import api.routes.admin.article.Router as AdminRouter
 import api.routes.auth.Router as AuthRouter
 import api.routes.article.Router as PublicRouter
-import com.password4j.Password
 
 
 class Routes extends Directives:
@@ -25,13 +26,15 @@ object HttpServer extends App:
 
     implicit val executionContext: ExecutionContextExecutor = system.executionContext
 
-    val service = new Routes
+    private val service = new Routes
 
-    val bindingFuture = Http().newServerAt("0.0.0.0", 9001).bind(service.route)
+    private val port = 9001
 
-    println("Server started at -> http://localhost:9001")
+    private val bindingFuture = Http().newServerAt("0.0.0.0", port).bind(service.route)
+
+    println(s"Server started at -> http://localhost:$port")
     StdIn.readLine()
     bindingFuture
       .flatMap(_.unbind())
       .onComplete(_ => system.terminate())
-
+      
