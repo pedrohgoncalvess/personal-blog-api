@@ -51,7 +51,7 @@ class Post extends Directives with AuthJsonSupport:
                         )
                       )
 
-                    case Failure(e) => complete(StatusCodes.InternalServerError, "An error occurred.")
+                    case Failure(_) => complete(StatusCodes.InternalServerError, "An error occurred.")
                   }
                 } else {
                   complete(StatusCodes.Unauthorized)
