@@ -5,20 +5,15 @@ import java.util.UUID
 import scala.util.{Failure, Success}
 
 import akka.http.scaladsl.server.{Directives, Route}
-import org.json4s.DefaultFormats
-import org.json4s.native.Serialization
 import akka.http.scaladsl.model.StatusCodes
 
 import database.models.pub.operations.{getArticleById, getTagsByArticle}
 import api.utils.AuthValidators.authenticator
 import api.routes.article.{ArticleComplete, GetJsonSupport}
-import api.routes.admin.article.NotFoundArticle
 import database.models.sys.operations.getUserById
 
 
 class Get extends Directives with GetJsonSupport:
-
-  implicit val formats: DefaultFormats.type = org.json4s.DefaultFormats
 
   val route: Route =
     path("article" / JavaUUID) { idArticle =>
@@ -47,6 +42,7 @@ class Get extends Directives with GetJsonSupport:
                               published = article.get.published,
                               published_at = article.get.published_at
                             ))
+                          case Failure(_) => complete(StatusCodes.InternalServerError, "Error while processing entity.")
                         }
                       case Failure(_) =>
                         complete(StatusCodes.InternalServerError, "Error while processing entity.")
