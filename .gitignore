@@ -1,7 +1,14 @@
-dbdata
-src/main/resources/application.conf
 .idea
 .bsp
+*.pem
+
+*.conf
+
+.bloop
+dbdata
 target
 project/target
-*.pem
+project/project
+
+.metals
+project/metals.sbt
