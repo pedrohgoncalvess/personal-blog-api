@@ -2,7 +2,7 @@ version: '3'
 services:
   template-db:
     image: postgres
-    restart: always
+    restart: no
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=admin
@@ -19,7 +19,7 @@ services:
     volumes:
       - ./:/app
     ports:
-      - "8080:8080"
+      - "9090:9001"
     stdin_open: true #studie better this
     tty: true #and this too
     depends_on:
