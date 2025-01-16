@@ -2,20 +2,18 @@ package api.routes.admin.article
 
 
 import java.time.LocalDateTime
-import scala.concurrent.Future
-import scala.util.{Failure, Success}
+import scala.util.{Success, Failure}
 
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.{Directives, Route}
-import org.json4s.DefaultFormats
 import api.utils.AuthValidators
 import api.utils.AuthValidators.authenticator
 
-import database.models.pub.operations.{getArticleById, updateArticle}
+import database.models.pub.operations.getArticleById
 import database.models.pub.Article
 
 
-class Patch extends Directives with ManipulateJsonSupport {
+class Patch extends Directives with ManipulateJsonSupport:
 
   val route: Route =
     path("article") {
@@ -24,7 +22,7 @@ class Patch extends Directives with ManipulateJsonSupport {
             patch {
               entity(as[UpdateArticle]) { article =>
                 onComplete(getArticleById(article.id)) {
-                  case Success(oArticle) =>
+                  case Success(oArticle) => 
                     if (oArticle.orNull == null)
                       complete(StatusCodes.NotFound, "Article not found.")
                     else
@@ -40,10 +38,10 @@ class Patch extends Directives with ManipulateJsonSupport {
                         id_user=auth.userId
                       )
                     complete(StatusCodes.OK)
+                  case Failure(_) => complete(StatusCodes.InternalServerError, "Error while processing entity.") 
             }
           }
         }
       }
     }
   }
-}
