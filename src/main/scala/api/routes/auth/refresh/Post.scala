@@ -51,7 +51,7 @@ class Post extends Directives with RefreshTokenJsonSupport with AuthJsonSupport:
                       case Failure(exception: Exception) => complete(StatusCodes.InternalServerError, "An error occurred.")
                     }
                   else 
-                    complete(StatusCodes.Unauthorized, "Not valid refresh token ")
+                    complete(StatusCodes.Unauthorized, "Not valid refresh token.")
               case Failure(_) => complete(StatusCodes.InternalServerError, "An error occurred.")
             }
           }
