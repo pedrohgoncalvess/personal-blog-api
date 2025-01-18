@@ -26,22 +26,18 @@ object AuthValidators {
 
   private val config: Config = ConfigFactory.load()
 
-  private def hexToBigInteger(hexString: String): BigInteger = {
+  private def hexToBigInteger(hexString: String): BigInteger =
     val cleanHex = hexString.replaceAll("[:\\s]", "")
     new BigInteger(cleanHex, 16)
-  }
 
-  private val modulusHex = config.getString("MODULUS_KEY")
-  private val publicExponent = config.getString("PUBLIC_EXPONENT")
-
-  private val modulusBigInt = hexToBigInteger(modulusHex)
-  private val publicExponentBigInt = new BigInteger(publicExponent)
+  private val modulusBigInt = hexToBigInteger(config.getString("MODULUS_KEY"))
+  private val publicExponentBigInt = hexToBigInteger(config.getString("PUBLIC_EXPONENT"))
 
   private val publicKeySpec = new RSAPublicKeySpec(modulusBigInt, publicExponentBigInt)
   private val publicKeyFactory = KeyFactory.getInstance("RSA")
   private val publicKey: RSAPublicKey = publicKeyFactory.generatePublic(publicKeySpec).asInstanceOf[RSAPublicKey]
 
-  private def validateToken(token: String): Boolean = {
+  private def validateToken(token: String): Boolean =
     val signedJWT = SignedJWT.parse(token)
 
     val verifier: JWSVerifier = new RSASSAVerifier(publicKey)
@@ -53,35 +49,16 @@ object AuthValidators {
       if (currentTime < expirationTime) true else false
     } else false
 
-  }
-
-  def authenticator(credentials: Credentials): Option[AuthInfo] = {
-    credentials match {
-      case p@Credentials.Provided(token) if validateToken(token) =>
-        try {
-          val signedJWT = SignedJWT.parse(token)
-          val claims = signedJWT.getJWTClaimsSet
-          val userId = UUID.fromString(claims.getStringClaim("id"))
-          val isAdmin = claims.getBooleanClaim("admin")
-          Some(AuthInfo(userId, isAdmin))
-        } catch {
-          case _: Exception => None
-        }
-      case _ => None
-    }
-  }
 
   def generateAccessToken(userId: UUID, admin: Boolean): (String, LocalDateTime) =
       val config: Config = ConfigFactory.load()
 
-      val modulus = new BigInteger(config.getString("MODULUS_KEY"), 16)
-      val privateExponent = new BigInteger(config.getString("PRIVATE_EXPONENT"), 16)
+      val privateExponent = hexToBigInteger(config.getString("PRIVATE_EXPONENT"))
 
       val jwsAlgorithm: JWSAlgorithm = JWSAlgorithm.RS256
 
-      val privateKeySpec = new RSAPrivateKeySpec(modulus, privateExponent)
-      val keyFactory = KeyFactory.getInstance("RSA")
-      val privateKey = keyFactory.generatePrivate(privateKeySpec)
+      val privateKeySpec = new RSAPrivateKeySpec(modulusBigInt, privateExponent)
+      val privateKey = publicKeyFactory.generatePrivate(privateKeySpec)
 
       val jwsHeader = new JWSHeader.Builder(jwsAlgorithm)
         .keyID(UUID.randomUUID().toString)
@@ -102,5 +79,22 @@ object AuthValidators {
         signedJWT.serialize(),
         expirationTime.toInstant.atZone(ZoneId.systemDefault).toLocalDateTime
       )
+
+
+  def authenticator(credentials: Credentials): Option[AuthInfo] = {
+    credentials match {
+      case p@Credentials.Provided(token) if validateToken(token) =>
+        try {
+          val signedJWT = SignedJWT.parse(token)
+          val claims = signedJWT.getJWTClaimsSet
+          val userId = UUID.fromString(claims.getStringClaim("id"))
+          val isAdmin = claims.getBooleanClaim("admin")
+          Some(AuthInfo(userId, isAdmin))
+        } catch {
+          case _: Exception => None
+        }
+      case _ => None
+    }
+  }
 
 }
