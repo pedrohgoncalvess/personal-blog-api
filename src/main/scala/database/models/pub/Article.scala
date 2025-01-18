@@ -20,13 +20,13 @@ case class Article(
 
 
 object Article:
-  def tupled = (Article.apply _).tupled
+  def tupled = (Article.apply).tupled
 
 
 object ArticleTable:
   
   class ArticleTable(tag: Tag) extends Table[Article](tag, Some("pub"), "article"):
-    def id = column[Option[UUID]]("id", O.PrimaryKey, O.AutoInc)
+    def id = column[Option[UUID]]("id", O.PrimaryKey)
     def id_user = column[UUID]("id_user")
     def title = column[String]("title")
     def description = column[Option[String]]("description", O.Length(350))

@@ -21,15 +21,6 @@ def getAllArticles: Future[Seq[Article]] = db.run(articleTable.result)
 def getArticleById(id: UUID): Future[Option[Article]] = db.run(articleTable.filter(_.id===id).result.headOption)
 
 
-def getArticlesByTag(tagName: String): Future[Seq[Article]] =
-  val query = for {
-    tag <- tagTable if tag.name === tagName
-    article <- articleTable if article.id === tag.id_article
-  } yield article
-
-  db.run(query.result)
-
-
 def updateArticle(nArticle: Article): Future[Int] =
   val query = articleTable.filter(_.id === nArticle.id)
 
@@ -53,5 +44,6 @@ def updateArticle(nArticle: Article): Future[Int] =
 def createArticle(nArticle: Article): Future[Int] =
   db.run(articleTable += nArticle)
   
+
 def deleteArticleById(id: UUID): Future[Int] =
   db.run(articleTable.filter(_.id==id).delete)

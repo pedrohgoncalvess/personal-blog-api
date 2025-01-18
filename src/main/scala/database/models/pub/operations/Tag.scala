@@ -3,6 +3,7 @@ package database.models.pub.operations
 
 import scala.concurrent.Future
 import java.util.UUID
+import java.time.LocalDateTime
 
 import slick.jdbc.PostgresProfile.api.*
 
@@ -12,14 +13,7 @@ import database.models.pub.TagT
 import database.models.pub.TagTable.tagTable
 
 
-def getAllDistinctTags: Future[Seq[String]] = db.run(
-  tagTable
-    .map(_.name)
-    .distinct
-    .result
-)
+def getAllTags: Future[Seq[TagT]] = db.run(tagTable.result)
 
-def getTagsByArticle(idArticle: UUID): Future[Seq[TagT]] = db.run(
-  tagTable.filter(_.id_article===idArticle).result
-)
 
+def createTag(t: TagT): Future[Int] = db.run(tagTable += t)
