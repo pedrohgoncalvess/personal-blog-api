@@ -3,7 +3,7 @@ package api.routes.article
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.{Directives, Route}
 import api.routes.article.{ArticleComplete, ArticlePreview, ArticlesPreview}
-import database.models.pub.operations.{getAllArticles, getArticleById, getArticlesByTag, getTagsByArticle}
+import database.models.pub.operations.{getAllArticles, getArticleById, getArticlesByTag, getArticleTags}
 import database.models.sys.operations.getUserById
 
 import scala.util.{Failure, Success}
@@ -21,6 +21,7 @@ class Get extends Directives with GetJsonSupport {
               onComplete(articlesToReturn) {
                 case Success(articles) =>
                   val jsonArticles = articles.filter(_.published).map(a => ArticlePreview(a.id.get, a.title, a.description, Array.empty[String], a.created_at.get))
+                  jsonArticles.foreach(println)
                   complete(ArticlesPreview(jsonArticles.toArray))
                 case Failure(exception) => complete(StatusCodes.InternalServerError, "Error when getting the articles.")
               }
@@ -36,6 +37,7 @@ class Get extends Directives with GetJsonSupport {
                 } else {
                   complete(StatusCodes.NotFound, s"Not found article with tag ${tag.get}")
                 }
+                case Failure(_) => complete(StatusCodes.InternalServerError, "Error while fetching articles.") 
               }
             }
           }
@@ -49,7 +51,7 @@ class Get extends Directives with GetJsonSupport {
                 if (article.orNull == null) complete(null)
                 else if (article.get.published)
                   val art = article.get
-                  val tagOpr = getTagsByArticle(art.id.get)
+                  val tagOpr = getArticleTags(art.id.get)
                   onComplete(tagOpr) {
                     case Success(tags) =>
                       onComplete(getUserById(article.get.id_user)) {
