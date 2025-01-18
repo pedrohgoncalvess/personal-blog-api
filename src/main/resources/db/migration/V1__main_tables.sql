@@ -86,10 +86,20 @@ EXECUTE FUNCTION att_published_at();
 
 CREATE TABLE "pub"."tag" (
     id UUID NOT NULL DEFAULT uuid_generate_v4(),
-    id_article UUID NOT NULL,
-    name VARCHAR(30) NOT NULL,
+    name VARCHAR(30) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT tag_pk PRIMARY KEY (id),
-    CONSTRAINT tag_article_fk FOREIGN KEY (id_article) REFERENCES "pub"."article"(id) ON DELETE CASCADE
+    CONSTRAINT tag_pk PRIMARY KEY (id)
+);
+
+
+CREATE TABLE "pub"."article_tag" (
+    id UUID NOT NULL DEFAULT uuid_generate_v4(),
+    id_article UUID NOT NULL,
+    id_tag UUID NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT article_tag_pk PRIMARY KEY (id), 
+    CONSTRAINT article_fk FOREIGN KEY (id_article) REFERENCES "pub"."article"(id) ON DELETE CASCADE,
+    CONSTRAINT tag_fk FOREIGN KEY (id_tag) REFERENCES "pub"."tag"(id) ON DELETE CASCADE
 );
