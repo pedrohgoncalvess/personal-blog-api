@@ -1,5 +1,6 @@
 package api.routes.article
 
+
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -34,6 +35,7 @@ case class ArticleComplete(
                           published: Boolean,
                           published_at: Option[LocalDateTime]
                           )
+
 
 trait GetJsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
 
