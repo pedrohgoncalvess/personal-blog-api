@@ -7,7 +7,7 @@ import scala.util.{Failure, Success}
 import akka.http.scaladsl.server.{Directives, Route}
 import akka.http.scaladsl.model.StatusCodes
 
-import database.models.pub.operations.{getArticleById, getTagsByArticle}
+import database.models.pub.operations.{getArticleById, getArticleTags}
 import api.utils.AuthValidators.authenticator
 import api.routes.article.{ArticleComplete, GetJsonSupport}
 import database.models.sys.operations.getUserById
@@ -24,7 +24,7 @@ class Get extends Directives with GetJsonSupport:
               onComplete(documentToReturn) {
                 case Success(article) =>
                   if (article.orNull != null)
-                    val artTagsOpr = getTagsByArticle(article.get.id.get)
+                    val artTagsOpr = getArticleTags(article.get.id.get)
                     onComplete(artTagsOpr) {
                       case Success(artTags) =>
                         onComplete(getUserById(article.get.id_user)) {
