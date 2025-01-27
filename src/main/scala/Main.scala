@@ -5,20 +5,17 @@ import akka.actor.typed.ActorSystem
 import akka.actor.typed.scaladsl.Behaviors
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.{Directives, Route}
-
-import api.routes.admin.article.Router as AdminRouter
+import api.routes.article.Router as ArticleRouter
 import api.routes.auth.Router as AuthRouter
-import api.routes.article.Router as PublicRouter
 import database.migration.Main.flyway
 
 
 class Routes extends Directives:
 
-  private val adminRouter = new AdminRouter
+  private val articleRouter = new ArticleRouter
   private val authRouter = new AuthRouter
-  private val publicRouter = new PublicRouter
 
-  val route: Route = concat(adminRouter.router, authRouter.router, publicRouter.router)
+  val route: Route = concat(articleRouter.router, authRouter.router)
 
 
 object HttpServer extends App:
