@@ -1,5 +1,4 @@
-package api.routes.admin.article
-
+package api.routes.article
 
 import java.time.LocalDateTime
 import java.util.UUID
@@ -66,9 +65,7 @@ class Post extends Directives with ManipulateJsonSupport:
 
                             onComplete(oprCreateRelation) {
                               case Success(_) => complete(StatusCodes.Created) 
-                              case Failure(e) => 
-                                println(e)
-                                complete(StatusCodes.InternalServerError, "Unable to create new articles now, please try again later.")
+                              case Failure(_) => complete(StatusCodes.InternalServerError, "Unable to create new articles now, please try again later.")
                       }
                     }
                       case Failure(_) => complete(StatusCodes.InternalServerError, "Unable to create new articles now, please try again later.")

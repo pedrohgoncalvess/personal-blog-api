@@ -1,5 +1,4 @@
-package api.routes.admin.article
-
+package api.routes.articles
 
 import java.time.LocalDateTime
 import scala.util.{Success, Failure}

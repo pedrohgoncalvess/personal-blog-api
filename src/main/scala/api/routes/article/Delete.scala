@@ -1,5 +1,4 @@
-package api.routes.admin.article
-
+package api.routes.article
 
 import scala.util.{Failure, Success}
 import akka.http.scaladsl.model.StatusCodes
