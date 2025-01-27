@@ -1,18 +1,14 @@
 package database.models.pub.operations
 
-import api.routes.admin.article.UpdateArticle
 import database.models.pub.Article
-import database.models.pub.ArticleTable.{ArticleTable, articleTable}
+import database.models.pub.ArticleTable.articleTable
 import database.Connection.db
-import database.models.pub.TagTable.tagTable
 
 import scala.concurrent.Future
 import slick.jdbc.PostgresProfile.api.*
-import slick.model.Column
 
 import java.time.LocalDateTime
 import java.util.UUID
-import scala.concurrent.ExecutionContext.Implicits.global
 
 
 def getAllArticles: Future[Seq[Article]] = db.run(articleTable.result)
