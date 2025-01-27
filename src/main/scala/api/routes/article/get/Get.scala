@@ -1,11 +1,11 @@
 package api.routes.article.get
 
+import scala.util.{Failure, Success}
+
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.{Directives, Route}
-import api.routes.admin.article.get.*
-import api.utils.AuthValidators.authenticator
 
-import scala.util.{Failure, Success}
+import api.utils.AuthValidators.authenticator
 
 
 class Get extends Directives with GetJsonSupport:

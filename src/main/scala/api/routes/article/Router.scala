@@ -3,6 +3,7 @@ package api.routes.article
 import akka.http.scaladsl.server.Directives.concat
 import akka.http.scaladsl.server.{Directives, Route}
 import api.cors.GenericCors
+import api.routes.article.patch.Patch
 import api.routes.article.get.Get
 
 

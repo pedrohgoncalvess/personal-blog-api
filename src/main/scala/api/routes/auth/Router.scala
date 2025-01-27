@@ -3,8 +3,8 @@ package api.routes.auth
 
 import akka.http.scaladsl.server.Directives.concat
 import akka.http.scaladsl.server.Route
+
 import api.cors.GenericCors
-import api.routes.article.Get
 import api.routes.auth.refresh.Post as RefreshPost
 
 

@@ -3,8 +3,6 @@ package api.routes.article
 import java.util.UUID
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import com.fasterxml.jackson.annotation.JsonGetter
-import org.codehaus.jackson.annotate.JsonSetter
 import spray.json.{DefaultJsonProtocol, RootJsonFormat}
 
 import api.utils.JsonFormatters.*
